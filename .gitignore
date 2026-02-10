@@ -1,0 +1,16 @@
+
+fruit/
+venv/
+env/
+.env
+
+
+__pycache__/
+*.py[cod]
+
+
+*.pt
+
+
+static/uploads/*
+!static/uploads/.gitkeep
