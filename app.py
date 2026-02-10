@@ -38,6 +38,6 @@ def upload():
         cv2.imwrite(os.path.join(app.config['UPLOAD_FOLDER'], res_name), img)
         return render_template('index.html', result=res_name, grade=grade, detections=detections)
     return redirect(url_for('index'))
-
+app = app
 if __name__ == '__main__':
     app.run(debug=True, threaded=True)
