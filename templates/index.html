@@ -4,69 +4,241 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fruit Quality Detection</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f5f5f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .main-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #333;
+            font-weight: 500;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .fruit-types {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+        .fruit-item {
+            text-align: center;
+        }
+        .fruit-item .name {
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 5px;
+            font-size: 18px;
+        }
+        .fruit-item .types {
+            font-size: 13px;
+            color: #777;
+        }
+        .option-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 30px 0;
+        }
+        .option-btn {
+            flex: 1;
+            max-width: 250px;
+            padding: 15px;
+            border: 2px solid #007bff;
+            border-radius: 8px;
+            background: white;
+            color: #007bff;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        .option-btn:hover {
+            background: #007bff;
+            color: white;
+        }
+        .upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            background-color: #fafafa;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+        .upload-area:hover {
+            border-color: #007bff;
+        }
+        .upload-area h5 {
+            color: #333;
+            font-weight: 400;
+            margin-bottom: 10px;
+        }
+        .upload-area .small-text {
+            color: #888;
+            font-size: 13px;
+        }
+        .btn-submit {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 40px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+            max-width: 300px;
+        }
+        .btn-submit:hover {
+            background-color: #0056b3;
+        }
+        .info-box {
+            background-color: #e9ecef;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 30px;
+            font-size: 14px;
+            color: #555;
+        }
+        .quality-badges {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 13px;
+            margin: 0 5px;
+        }
+        .badge-fresh {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .badge-rotten {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .file-name {
+            margin-top: 15px;
+            color: #007bff;
+            font-size: 14px;
+        }
+        .separator {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 30px 0;
+        }
+        .separator::before,
+        .separator::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #ddd;
+        }
+        .separator span {
+            padding: 0 10px;
+            color: #888;
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
-
-<nav class="navbar">
-    <div class="container">
-        <h1>Fruit Quality Detection System</h1>
-        <p class="subtitle">Deep Learning Based Evaluation</p>
-    </div>
-</nav>
-
-<div class="container">
-    <div class="main-grid">
-        
-        <div class="card">
-            <h2 class="card-title">Live Camera Analysis</h2>
-            <div class="view-panel" id="videoBox">
-                <div class="placeholder-text">Camera Standby</div>
-            </div>
-            <button class="btn btn-primary" onclick="startFeed()">Initialize Camera</button>
+    <div class="main-container">
+        <div class="header">
+            <h1>Fruit Quality Detection</h1>
+            <p>Check the freshness of apples, bananas, or oranges</p>
         </div>
 
         <div class="card">
-            <h2 class="card-title">Static Image Inspection</h2>
-            
-            <form action="/upload" method="POST" enctype="multipart/form-data">
-                <div class="upload-box">
-                    <input type="file" name="file" id="file" class="inputfile" onchange="this.form.submit()" />
-                    <label for="file">Choose a File</label>
+            <div class="fruit-types">
+                <div class="fruit-item">
+                    <div class="name">Apple</div>
+                    <div class="types">Fresh / Rotten</div>
                 </div>
-            </form>
+                <div class="fruit-item">
+                    <div class="name">Banana</div>
+                    <div class="types">Fresh / Rotten</div>
+                </div>
+                <div class="fruit-item">
+                    <div class="name">Orange</div>
+                    <div class="types">Fresh / Rotten</div>
+                </div>
+            </div>
 
-            {% if result %}
-            <div class="result-container">
-                <div class="result-header">
-                    <span class="badge {{ 'badge-fail' if 'C' in grade else 'badge-pass' }}">
-                        {{ grade }}
-                    </span>
+            <div class="quality-badges">
+                <span class="badge badge-fresh">Fresh Fruit</span>
+                <span class="badge badge-rotten">Rotten Fruit</span>
+            </div>
+
+            <div class="option-buttons">
+                <a href="#upload-section" class="option-btn" onclick="showUpload()">Upload Image</a>
+                <a href="/webcam" class="option-btn">Use Webcam</a>
+            </div>
+
+            <div id="upload-section">
+                <div class="separator">
+                    <span>Upload an image</span>
                 </div>
-                <img src="{{ url_for('static', filename='uploads/' + result) }}" class="img-fluid">
-                
-                <div class="det-summary">
-                    <h4>Detailed Findings:</h4>
-                    {% for d in detections %}
-                    <div class="det-row">
-                        <span>{{ d.label }}</span>
-                        <span>{{ d.conf }}%</span>
+
+                <form action="/upload" method="post" enctype="multipart/form-data">
+                    <div class="upload-area" onclick="document.getElementById('imageInput').click()">
+                        <h5>Click to select an image</h5>
+                        <div class="small-text">Supported: JPG, PNG, JPEG (Max 10MB)</div>
+                        <input type="file" class="d-none" name="image" id="imageInput" accept="image/*" required onchange="updateFileName(this)">
+                        <div id="fileName" class="file-name"></div>
                     </div>
-                    {% endfor %}
-                </div>
+                    
+                    <div style="text-align: center; margin-top: 25px;">
+                        <button type="submit" class="btn-submit">Analyze Image</button>
+                    </div>
+                </form>
             </div>
-            {% endif %}
+
+            <div class="info-box">
+                <strong>Note:</strong> Upload a clear image of a single fruit for best results. The system will detect both the fruit type and its quality condition.
+            </div>
         </div>
-
     </div>
-</div>
 
-<script>
-    function startFeed() {
-        const box = document.getElementById('videoBox');
-        box.innerHTML = `<img src="{{ url_for('video_feed') }}" class="img-fluid animate-fade">`;
-    }
-</script>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function updateFileName(input) {
+            if (input.files && input.files[0]) {
+                document.getElementById('fileName').innerHTML = 'Selected: ' + input.files[0].name;
+            }
+        }
+        
+        function showUpload() {
+            document.getElementById('upload-section').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
 </body>
 </html>

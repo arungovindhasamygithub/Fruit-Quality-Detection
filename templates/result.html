@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detection Results</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f5f5f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .main-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #333;
+            font-weight: 500;
+            font-size: 30px;
+            margin-bottom: 5px;
+        }
+        .header p {
+            color: #666;
+            font-size: 15px;
+        }
+        .result-card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .grade-box {
+            text-align: center;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-weight: 500;
+        }
+        .grade-fresh {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .grade-rotten {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .grade-unknown {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+        .image-section {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            height: 100%;
+        }
+        .image-section h3 {
+            font-size: 18px;
+            color: #444;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        .fruit-image {
+            width: 100%;
+            max-height: 300px;
+            object-fit: contain;
+            border-radius: 6px;
+            background-color: white;
+            padding: 5px;
+            border: 1px solid #dee2e6;
+        }
+        .stats-row {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .stat-box {
+            flex: 1;
+            background-color: white;
+            border-radius: 6px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #dee2e6;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: 500;
+            color: #007bff;
+        }
+        .stat-label {
+            font-size: 13px;
+            color: #666;
+            margin-top: 5px;
+        }
+        .details-section {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            height: 100%;
+        }
+        .details-section h3 {
+            font-size: 18px;
+            color: #444;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        .progress-container {
+            background-color: white;
+            border-radius: 6px;
+            padding: 20px;
+            border: 1px solid #dee2e6;
+        }
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            color: #555;
+            font-size: 14px;
+        }
+        .progress-bar-bg {
+            width: 100%;
+            height: 20px;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background-color: #007bff;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+        .info-table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        .info-table td {
+            padding: 10px;
+            border-bottom: 1px solid #dee2e6;
+            font-size: 14px;
+        }
+        .info-table td:first-child {
+            font-weight: 500;
+            color: #555;
+            width: 40%;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+        .status-fresh {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status-rotten {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .status-unknown {
+            background-color: #e9ecef;
+            color: #495057;
+            border: 1px solid #ced4da;
+        }
+        .detail-item {
+            background-color: white;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border: 1px solid #dee2e6;
+            font-size: 14px;
+        }
+        .detail-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .detail-col {
+            flex: 1;
+            min-width: 150px;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 6px;
+            font-size: 15px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            color: white;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 6px;
+            font-size: 15px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+        .btn-secondary:hover {
+            background-color: #545b62;
+            color: white;
+        }
+        .footer-note {
+            text-align: center;
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="header">
+            <h1>Analysis Results</h1>
+            <p>Fruit quality detection completed</p>
+        </div>
+
+        <div class="result-card">
+            <div class="grade-box 
+                {% if quality == 'Fresh' %}grade-fresh
+                {% elif quality == 'Rotten' %}grade-rotten
+                {% else %}grade-unknown
+                {% endif %}">
+                {{ grade }}
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="image-section">
+                        <h3>Uploaded Image</h3>
+                        <img src="/{{ image_path }}" alt="Fruit" class="fruit-image">
+                        
+                        <div class="stats-row">
+                            <div class="stat-box">
+                                <div class="stat-value">{{ confidence }}%</div>
+                                <div class="stat-label">Confidence</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">{{ fruit_name }}</div>
+                                <div class="stat-label">Fruit Type</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="details-section">
+                        <h3>Analysis Details</h3>
+                        
+                        <div class="progress-container">
+                            <div class="progress-label">
+                                <span>Detection Confidence</span>
+                                <span>{{ confidence }}%</span>
+                            </div>
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill" style="width: {{ confidence }}%;"></div>
+                            </div>
+                        </div>
+
+                        <table class="info-table">
+                            <tr>
+                                <td>Fruit Type:</td>
+                                <td>
+                                    <span class="status-badge" style="background-color: #e9ecef; color: #495057;">{{ fruit_name }}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Quality Status:</td>
+                                <td>
+                                    {% if quality == 'Fresh' %}
+                                        <span class="status-badge status-fresh">Fresh</span>
+                                    {% elif quality == 'Rotten' %}
+                                        <span class="status-badge status-rotten">Rotten</span>
+                                    {% else %}
+                                        <span class="status-badge status-unknown">Unknown</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Confidence Score:</td>
+                                <td>{{ confidence }}%</td>
+                            </tr>
+                            <tr>
+                                <td>Analysis Time:</td>
+                                <td><span id="currentTime"></span></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            {% if detections and detections|length > 0 %}
+            <div style="margin-top: 30px;">
+                <h3 style="font-size: 18px; color: #444; margin-bottom: 15px; font-weight: 500;">Detailed Detection Information</h3>
+                {% for d in detections %}
+                <div class="detail-item">
+                    <div class="detail-row">
+                        <div class="detail-col">
+                            <strong>Class:</strong> {{ d.class if d.class is defined else d.get('class', 'Unknown') }}
+                        </div>
+                        <div class="detail-col">
+                            <strong>Confidence:</strong> {{ (d.confidence * 100)|round(2) if d.confidence is defined else d.get('confidence', 0) }}%
+                        </div>
+                        <div class="detail-col">
+                            <strong>Quality:</strong>
+                            {% if 'fresh' in (d.class if d.class is defined else d.get('class', '')).lower() %}
+                                <span class="status-badge status-fresh">Fresh</span>
+                            {% elif 'rotten' in (d.class if d.class is defined else d.get('class', '')).lower() %}
+                                <span class="status-badge status-rotten">Rotten</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="action-buttons">
+                <a href="/" class="btn-primary">Analyze Another Image</a>
+                <a href="/webcam" class="btn-secondary">Use Webcam</a>
+                <button onclick="window.print()" class="btn-secondary">Print Results</button>
+            </div>
+
+            <div class="footer-note">
+                Fruit Quality Detection System
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('currentTime').innerHTML = new Date().toLocaleString();
+    </script>
+</body>
+</html>

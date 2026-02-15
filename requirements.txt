@@ -1,6 +1,7 @@
-flask
-ultralytics
+Flask>=2.0.0
+Werkzeug>=2.0.0
+inference-sdk
 opencv-python
 numpy
-pillow
-protobuf
+Pillow
+requests
